@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sites',
     'django.contrib.redirects',
+    'django_lookup_tables',
 ]
 
 SITE_ID = 1
