@@ -5,6 +5,12 @@ class LookupTable(models.Model):
 
     name = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        verbose_name = 'Lookup Table'
+
+    def __str__(self):
+        return self.name
+
 
 class LookupTableItem(models.Model):
 
@@ -15,3 +21,6 @@ class LookupTableItem(models.Model):
 
     class Meta:
         unique_together = ('table', 'name')
+
+    def __str__(self):
+        return self.name
