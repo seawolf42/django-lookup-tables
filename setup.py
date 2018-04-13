@@ -21,7 +21,7 @@ install_dependencies = (
 
 setup(
     name='django-lookup-tables',
-    version='0.1.0',
+    version='0.5.0',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
