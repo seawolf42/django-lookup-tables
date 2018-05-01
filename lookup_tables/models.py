@@ -21,6 +21,7 @@ class LookupTableItem(models.Model):
 
     class Meta:
         unique_together = ('table', 'name')
+        ordering = ('sort_order',)
 
     def __str__(self):
         return self.name
