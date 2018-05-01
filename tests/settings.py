@@ -14,7 +14,7 @@ DATABASES = {
 
 ROOT_URLCONF = 'tests.urls'
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -22,7 +22,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lookup_tables.apps.Config',
-]
+)
+
+LOOKUP_TABLES = {
+    'USE_ADMIN_SORTABLE2': True,
+}
+
+if LOOKUP_TABLES['USE_ADMIN_SORTABLE2']:
+    INSTALLED_APPS = INSTALLED_APPS + ('adminsortable2',)
 
 SITE_ID = 1
 

@@ -45,3 +45,15 @@ class LookupTableItemTest(TestCase):
     def test_names_can_be_same_in_different_table(self):
         table2 = models.LookupTable.objects.create(name=strings[-2])
         models.LookupTableItem.objects.create(name=self.item.name, table=table2)
+
+    def test_ordering(self):
+        self.item.sort_order = 3
+        self.item.save()
+        item2 = models.LookupTableItem.objects.create(name=strings[-1], table=self.table, sort_order=1)
+        item3 = models.LookupTableItem.objects.create(name=strings[-2], table=self.table, sort_order=4)
+        table2 = models.LookupTable.objects.create(name=strings[-2])
+        item4 = models.LookupTableItem.objects.create(name=strings[-1], table=table2, sort_order=2)
+        self.assertEquals(
+            list(models.LookupTableItem.objects.all()),
+            [item2, item4, self.item, item3]
+        )

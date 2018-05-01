@@ -7,6 +7,7 @@ class LookupTable(models.Model):
 
     class Meta:
         verbose_name = 'Lookup Table'
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -20,7 +21,9 @@ class LookupTableItem(models.Model):
     sort_order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
+        verbose_name = 'Lookup Table Item'
         unique_together = ('table', 'name')
+        ordering = ('sort_order',)
 
     def __str__(self):
         return self.name
