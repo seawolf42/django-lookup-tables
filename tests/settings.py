@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_lookup_tables.apps.Config',
+    'lookup_tables.apps.Config',
 ]
 
 SITE_ID = 1

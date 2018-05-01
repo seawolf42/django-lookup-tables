@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from django.test import TestCase
 
-from django_lookup_tables import models
+from lookup_tables import models
 
 
 strings = [x * 3 for x in range(3)]
