@@ -51,9 +51,11 @@ test: test.unittests test.flake8
 # commands for packaging and deploying to pypi
 #
 
-PHONY: docs
-docs:
+README.rst: README.md
 	pandoc -o README.rst README.md
+
+PHONY: docs
+docs: README.rst
 
 PHONY: sdist
 sdist: docs
