@@ -10,15 +10,14 @@ strings = [x * 3 for x in range(3)]
 class LookupTableTest(TestCase):
 
     def setUp(self):
-        self.item = models.LookupTable.objects.create(name=strings[0])
+        self.item = models.LookupTable()
 
-    def test_fields_exist(self):
-        pass
-
-    def test_names_must_be_unique(self):
-        models.LookupTable.objects.create(name=strings[1])
-        with self.assertRaises(IntegrityError):
-            models.LookupTable.objects.create(name=self.item.name)
+    def test_name_properties(self):
+        field = self.item._meta.get_field('name')
+        self.assertFalse(field.null)
+        self.assertFalse(field.blank)
+        self.assertTrue(field.unique)
+        self.assertEqual(field.max_length, 100)
 
 
 class LookupTableItemTest(TestCase):
@@ -27,12 +26,21 @@ class LookupTableItemTest(TestCase):
         self.table = models.LookupTable.objects.create(name=strings[-1])
         self.item = models.LookupTableItem.objects.create(name=strings[0], table=self.table)
 
-    def test_fields_exist(self):
-        self.assertIsNotNone(self.item.sort_order)
+    def test_table_properties(self):
+        field = self.item._meta.get_field('table')
+        self.assertFalse(field.null)
+        self.assertFalse(field.blank)
 
-    def test_table_is_mandatory(self):
-        self.item.table = None
-        self.assertRaises(IntegrityError, self.item.save)
+    def test_name_properties(self):
+        field = self.item._meta.get_field('name')
+        self.assertFalse(field.null)
+        self.assertFalse(field.blank)
+
+    def test_sort_order_properties(self):
+        field = self.item._meta.get_field('sort_order')
+        self.assertFalse(field.null)
+        self.assertFalse(field.blank)
+        self.assertEqual(field.default, 0)
 
     def test_table_relationship(self):
         self.assertRaises(IntegrityError, self.table.delete)
