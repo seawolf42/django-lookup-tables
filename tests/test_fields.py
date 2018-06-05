@@ -1,3 +1,4 @@
+from django.db import models as db_models
 from django.test import TestCase
 
 from lookup_tables import fields
@@ -54,3 +55,16 @@ class TestLookupTableItemChoicesIterators(TestCase):
         for i, choice in enumerate(iterator):
             self.assertEqual(choice[0], self.values[i].pk)
             self.assertEqual(choice[1], self.values[i].name)
+
+
+class TestLookupTableItemField(TestCase):
+
+    def test_table_created_from_field_reference(self):
+        class DummyModel(db_models.Model):
+            lookup = fields.LookupTableItemField(table_ref=strings[0])
+
+            class Meta:
+                app_label = 'test'
+
+        self.table = models.LookupTable.objects.get(table_ref=strings[0])
+        self.assertEqual(models.LookupTable.objects.count(), 1)
