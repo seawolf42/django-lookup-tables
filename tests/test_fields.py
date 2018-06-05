@@ -51,6 +51,21 @@ class LookupTableItemField(TestCase):
         self.assertFalse('limit_choices_to' in kwargs)
         self.assertEqual(kwargs['table_ref'], strings[0])
 
+    def test_get_choices(self):
+        item = fields.LookupTableItemField(table_ref=strings[0])
+        table = models.LookupTable.objects.get(name=strings[0])
+        choices = [
+            models.LookupTableItem.objects.create(table=table, name=strings[i], sort_order=i)
+            for i in range(len(strings))
+        ]
+        models.LookupTableItem.objects.create(
+            table=models.LookupTable.objects.create(name=strings[-1]),
+            name=strings[-1]
+        )
+        q_filter = item.get_lookuptableitem_choices()
+        for i, choice in enumerate(models.LookupTableItem.objects.filter(q_filter)):
+            self.assertEqual(choice, choices[i])
+
 
 class TestLookupTableItemFieldCreation(TestCase):
 
