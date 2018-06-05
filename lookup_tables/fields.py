@@ -17,7 +17,8 @@ class LookupTableItemField(db_models.ForeignKey):
 
     def deconstruct(self):
         name, path, args, kwargs = super(LookupTableItemField, self).deconstruct()
-        del kwargs['limit_choices_to']
+        if 'limit_choices_to' in kwargs:
+            del kwargs['limit_choices_to']
         kwargs['table_ref'] = self.table_ref
         return name, path, args, kwargs
 
