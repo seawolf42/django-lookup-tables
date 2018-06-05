@@ -6,6 +6,8 @@ from django.test import TestCase
 
 from lookup_tables import models
 
+from . import utils
+
 if sys.version_info[0] < 3:
     # python 2
     import mock
@@ -14,7 +16,7 @@ else:
     from unittest import mock
 
 
-strings = [x * 3 for x in range(3)]
+strings = utils.strings
 
 
 class LookupTableTest(TestCase):
