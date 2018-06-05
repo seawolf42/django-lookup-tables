@@ -5,7 +5,7 @@ from lookup_tables import fields
 from lookup_tables import models
 
 
-strings = [x * 3 for x in range(3)]
+strings = [x * 3 for x in 'abc']
 
 
 class TestLookupTableItemField(TestCase):

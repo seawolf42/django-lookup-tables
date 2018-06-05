@@ -14,7 +14,7 @@ else:
     from unittest import mock
 
 
-strings = [x * 3 for x in range(3)]
+strings = [x * 3 for x in 'abc']
 
 
 class LookupTableTest(TestCase):
