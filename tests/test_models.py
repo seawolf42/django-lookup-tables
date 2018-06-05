@@ -22,34 +22,62 @@ class LookupTableTest(TestCase):
     def setUp(self):
         self.item = models.LookupTable()
 
+    def test_table_ref_properties(self):
+        field = self.item._meta.get_field('table_ref')
+        self.assertFalse(field.null)
+        self.assertFalse(field.blank)
+        self.assertTrue(field.unique)
+        self.assertFalse(field.editable)
+        self.assertEqual(field.max_length, 100)
+
     def test_name_properties(self):
         field = self.item._meta.get_field('name')
         self.assertFalse(field.null)
         self.assertFalse(field.blank)
         self.assertTrue(field.unique)
+        self.assertTrue(field.editable)
         self.assertEqual(field.max_length, 100)
+
+    @mock.patch('django.db.models.Model.save')
+    def test_save_calls_full_clean(self, mock_save):
+        self.item.full_clean = mock.MagicMock()
+        self.item.save()
+        self.item.full_clean.assert_called_once()
+
+    def test_full_clean_cleans_necessary_fields(self):
+        self.item._clean_table_ref = mock.MagicMock()
+        self.item.clean()
+        self.item._clean_table_ref.assert_called_once()
+
+    def test_clean_table_ref(self):
+        self.item.name = 'A Regular String'
+        self.item._clean_table_ref()
+        self.assertEqual(self.item.table_ref, 'a-regular-string')
 
 
 class LookupTableItemTest(TestCase):
 
     def setUp(self):
-        self.table = models.LookupTable.objects.create(name=strings[-1])
+        self.table = models.LookupTable.objects.create(table_ref=strings[-1], name=strings[-1])
         self.item = models.LookupTableItem.objects.create(name=strings[0], table=self.table)
 
     def test_table_properties(self):
         field = self.item._meta.get_field('table')
         self.assertFalse(field.null)
         self.assertFalse(field.blank)
+        self.assertFalse(field.editable)
 
     def test_name_properties(self):
         field = self.item._meta.get_field('name')
         self.assertFalse(field.null)
         self.assertFalse(field.blank)
+        self.assertTrue(field.editable)
 
     def test_sort_order_properties(self):
         field = self.item._meta.get_field('sort_order')
         self.assertFalse(field.null)
         self.assertFalse(field.blank)
+        self.assertTrue(field.editable)
         self.assertEqual(field.default, 0)
 
     def test_table_relationship(self):

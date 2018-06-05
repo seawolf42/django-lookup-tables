@@ -1,14 +1,28 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
 
 
 class LookupTable(models.Model):
 
+    table_ref = models.CharField(max_length=100, unique=True, editable=False)
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         verbose_name = 'Lookup Table'
         ordering = ('name',)
+
+    def _clean_table_ref(self):
+        if self.table_ref:
+            return
+        self.table_ref = slugify(self.name)
+
+    def clean(self):
+        self._clean_table_ref()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super(LookupTable, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -16,7 +30,7 @@ class LookupTable(models.Model):
 
 class LookupTableItem(models.Model):
 
-    table = models.ForeignKey(LookupTable, on_delete=models.PROTECT)
+    table = models.ForeignKey(LookupTable, on_delete=models.PROTECT, editable=False)
     name = models.CharField(max_length=100)
 
     sort_order = models.PositiveSmallIntegerField(default=0)
