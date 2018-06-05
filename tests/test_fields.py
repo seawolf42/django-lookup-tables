@@ -4,8 +4,10 @@ from django.test import TestCase
 from lookup_tables import fields
 from lookup_tables import models
 
+from . import utils
 
-strings = [x * 3 for x in 'abc']
+
+strings = utils.strings
 
 
 class TestLookupTableItemChoicesIterators(TestCase):
@@ -57,10 +59,10 @@ class TestLookupTableItemChoicesIterators(TestCase):
             self.assertEqual(choice[1], self.values[i].name)
 
 
-class TestLookupTableItemField(TestCase):
+class TestLookupTableItemFieldCreation(TestCase):
 
     def test_table_created_from_field_reference(self):
-        class DummyModel(db_models.Model):
+        class DummyFieldTestModel(db_models.Model):
             lookup = fields.LookupTableItemField(table_ref=strings[0])
 
             class Meta:
