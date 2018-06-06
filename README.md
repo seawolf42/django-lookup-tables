@@ -52,9 +52,9 @@ class Post(models.Model):
     state = LookupTableItemField(table_ref='post-state')
 ```
 
-This will create a lookup table called "post-state" that has a single option, "<DEFAULT>". You can now set this field to any value from the `LookupTableItems` model that references the `LookupTable.objects.get(table_ref='post_state')` table.
+This will create a lookup table called "post-state" that has a single option, `'<DEFAULT>'`. You can now set this field to any value from the `LookupTableItems` model that references the `LookupTable.objects.get(table_ref='post_state')` table.
 
-In the admin you will see an entry for 'Lookup Tables'. Here you can manage tables and their associated values. Note that the automatically-generated "<DEFAULT>" item can be renamed or removed; this is just created so that the table is not empty on first use.
+In the admin you will see an entry for 'Lookup Tables'. Here you can manage tables and their associated values. Note that the automatically-generated `'<DEFAULT>'` item can be renamed or removed; this is just created so that the table is not empty on first use.
 
 `django-lookup-tables` integrates properly with forms and `djangorestframework`, so all UI naturally gets up-to-date selection lists just like if you were using a `CharField` with a choices enum or tuple list.
 
