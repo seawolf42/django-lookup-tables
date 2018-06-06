@@ -1,3 +1,4 @@
 django~=1.11
 mock
 flake8
+twine
