@@ -26,7 +26,37 @@ INSTALLED_APPS = (
 
 ## Usage
 
-In the admin you will see an entry for 'Lookup Tables'. Here you can add tables.
+The primary use case for lookup tables is to create user-managed lists of options for models to choose from. Consider a model with a field called, for instance, `state`:
+
+```python
+from django.db import models
+from lookup_tables.fields import LookupTableItemField
+
+CHOICES = (('draft', 'draft'), ('published', 'published'))
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    state = models.CharField(choices=CHOICES)
+```
+
+While this is easy to build, changing the choices list requires rebuilding and redeploying your application.
+
+The above model could instead be written as:
+
+```python
+from django.db import models
+from lookup_tables.fields import LookupTableItemField
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    state = LookupTableItemField(table_ref='post-state')
+```
+
+This will create a lookup table called "post-state" that has a single option, "<DEFAULT>". You can now set this field to any value from the `LookupTableItems` model that references the `LookupTable.objects.get(table_ref='post_state')` table.
+
+In the admin you will see an entry for 'Lookup Tables'. Here you can manage tables and their associated values. Note that the automatically-generated "<DEFAULT>" item can be renamed or removed; this is just created so that the table is not empty on first use.
+
+`django-lookup-tables` integrates properly with forms and `djangorestframework`, so all UI naturally gets up-to-date selection lists just like if you were using a `CharField` with a choices enum or tuple list.
 
 Each table has an arbitrary list of items. You can order them by setting the "Sort Order" field to any positive integer.
 
@@ -52,10 +82,6 @@ LOOKUP_TABLES = {
 <a name="contributing"></a>
 ## Contributing
 
-I am actively seeking contributions to this package. Things that need to be completed for it to be usable generally:
-
-* Simple way to reference lookup values
-* Simple way to reference lookup tables
-* REST API (using Django Rest Framework) for looking up all the value options for a foreign key
+I am actively seeking contributions to this package. Check the "Issues" section of the repository for my current hit list.
 
 If you have suggestions for other features I am open to hearing them. Use the "Issues" section of the repository to start a conversation.
