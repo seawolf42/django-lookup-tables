@@ -54,7 +54,7 @@ class LookupTableItemField(TestCase):
     def test_get_choices(self):
         item = fields.LookupTableItemField(table_ref=strings[0])
         table = models.LookupTable.objects.get(name=strings[0])
-        choices = [
+        choices = [table.lookuptableitem_set.first()] + [
             models.LookupTableItem.objects.create(table=table, name=strings[i], sort_order=i)
             for i in range(len(strings))
         ]
@@ -70,11 +70,16 @@ class LookupTableItemField(TestCase):
 class TestLookupTableItemFieldCreation(TestCase):
 
     def test_table_created_from_field_reference(self):
+        self.assertEqual(models.LookupTable.objects.count(), 0)
+        self.assertEqual(models.LookupTableItem.objects.count(), 0)
+
         class DummyFieldTestModel(db_models.Model):
             lookup = fields.LookupTableItemField(table_ref=strings[0])
 
             class Meta:
                 app_label = 'test'
 
-        self.table = models.LookupTable.objects.get(table_ref=strings[0])
         self.assertEqual(models.LookupTable.objects.count(), 1)
+        table = models.LookupTable.objects.get(table_ref=strings[0])
+        self.assertEqual(models.LookupTableItem.objects.count(), 1)
+        models.LookupTableItem.objects.get(table=table, name='<DEFAULT>')

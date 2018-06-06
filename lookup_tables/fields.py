@@ -10,6 +10,7 @@ class LookupTableItemField(db_models.ForeignKey):
         self.lookuptable = models.LookupTable.objects.filter(table_ref=table_ref).first()
         if not self.lookuptable:
             self.lookuptable = models.LookupTable.objects.create(table_ref=table_ref, name=table_ref)
+            models.LookupTableItem.objects.create(table=self.lookuptable, name='<DEFAULT>')
         kwargs['to'] = 'lookup_tables.LookupTableItem'
         kwargs['on_delete'] = db_models.PROTECT
         kwargs['limit_choices_to'] = self.get_lookuptableitem_choices
