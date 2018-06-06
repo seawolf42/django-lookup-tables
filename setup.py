@@ -1,7 +1,8 @@
 import os
 import sys
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
+from setuptools import setup
 
 
 try:
@@ -21,7 +22,7 @@ install_dependencies = (
 
 setup(
     name='django-lookup-tables',
-    version='0.10.3',
+    version='0.10.4',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
