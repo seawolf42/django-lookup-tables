@@ -1,14 +1,15 @@
 import os
 import sys
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
+from setuptools import setup
 
 
 try:
-    with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
+    with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
         README = readme.read()
 except Exception:
-    README = '<failed to open README.rst>'
+    README = '<failed to open README.md>'
 
 
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -21,12 +22,13 @@ install_dependencies = (
 
 setup(
     name='django-lookup-tables',
-    version='0.10.3',
+    version='0.10.4',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
     description='Combine all lookup tables into a single unified system.',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='jeffrey k eliasen',
     author_email='jeff+django-lookup-tables@jke.net',
     url='https://github.com/seawolf42/django-lookup-tables',
