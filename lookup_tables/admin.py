@@ -32,3 +32,6 @@ class LookupTableAdmin(admin.ModelAdmin):
     )
 
     inlines = (ItemsInline,)
+
+    def has_add_permission(self, request):
+        return False
