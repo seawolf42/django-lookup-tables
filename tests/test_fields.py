@@ -25,9 +25,9 @@ class LookupTableItemField(TestCase):
     def test_construction(self, mock_fk_init):
         self.assertEqual(models.LookupTable.objects.filter(name=strings[0]).count(), 0)
         item = fields.LookupTableItemField(table_ref=strings[0])
-        self.assertEqual(models.LookupTable.objects.filter(name=strings[0]).count(), 1)
+        self.assertEqual(models.LookupTable.objects.filter(name=strings[0]).count(), 0)
         self.assertEqual(item.table_ref, strings[0])
-        self.assertEqual(item.lookuptable, models.LookupTable.objects.get())
+        self.assertEqual(item.lookuptable, None)
 
     @mock.patch('django.db.models.ForeignKey.__init__')
     def test_kwargs_includes_foreign_key_requisite_values(self, mock_fk_init):
@@ -53,8 +53,8 @@ class LookupTableItemField(TestCase):
 
     def test_get_choices(self):
         item = fields.LookupTableItemField(table_ref=strings[0])
-        table = models.LookupTable.objects.get(name=strings[0])
-        choices = [table.lookuptableitem_set.first()] + [
+        table = models.LookupTable.objects.create(name=strings[0])
+        choices = [
             models.LookupTableItem.objects.create(table=table, name=strings[i], sort_order=i)
             for i in range(len(strings))
         ]
@@ -66,20 +66,13 @@ class LookupTableItemField(TestCase):
         for i, choice in enumerate(models.LookupTableItem.objects.filter(q_filter)):
             self.assertEqual(choice, choices[i])
 
-
-class TestLookupTableItemFieldCreation(TestCase):
-
     def test_table_created_from_field_reference(self):
+        item = fields.LookupTableItemField(table_ref=strings[0])
         self.assertEqual(models.LookupTable.objects.count(), 0)
         self.assertEqual(models.LookupTableItem.objects.count(), 0)
-
-        class DummyFieldTestModel(db_models.Model):
-            lookup = fields.LookupTableItemField(table_ref=strings[0])
-
-            class Meta:
-                app_label = 'test'
-
+        item.get_lookuptableitem_choices()
         self.assertEqual(models.LookupTable.objects.count(), 1)
         table = models.LookupTable.objects.get(table_ref=strings[0])
+        self.assertEqual(item.lookuptable, table)
         self.assertEqual(models.LookupTableItem.objects.count(), 1)
         models.LookupTableItem.objects.get(table=table, name='<DEFAULT>')
