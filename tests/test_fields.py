@@ -36,6 +36,7 @@ class LookupTableItemField(TestCase):
             to='lookup_tables.LookupTableItem',
             on_delete=db_models.PROTECT,
             limit_choices_to=item.get_lookuptableitem_choices,
+            related_name='+',
         )
 
     @mock.patch('django.db.models.ForeignKey.__init__')

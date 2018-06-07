@@ -11,6 +11,7 @@ class LookupTableItemField(db_models.ForeignKey):
         kwargs['to'] = 'lookup_tables.LookupTableItem'
         kwargs['on_delete'] = db_models.PROTECT
         kwargs['limit_choices_to'] = self.get_lookuptableitem_choices
+        kwargs['related_name'] = '+'
         super(LookupTableItemField, self).__init__(*args, **kwargs)
 
     def deconstruct(self):
