@@ -2,6 +2,11 @@ from lookup_tables.models import LookupTableItem
 from rest_framework import fields
 import six
 
+from django.conf import settings
+
+
+_IGNORE_INIT_RESET = getattr(settings, 'LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET', False)
+
 
 class LookupTableItemSerializerField(fields.ChoiceField):
 
@@ -9,7 +14,8 @@ class LookupTableItemSerializerField(fields.ChoiceField):
         self._table_ref = table_ref
         self._choices = None
         super(LookupTableItemSerializerField, self).__init__([], **kwargs)
-        self._reset_choices()
+        if not _IGNORE_INIT_RESET:
+            self._reset_choices()
 
     def to_internal_value(self, data):
         if data == '' and self.allow_blank:
