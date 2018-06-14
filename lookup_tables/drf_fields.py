@@ -7,6 +7,7 @@ class LookupTableItemSerializerField(fields.ChoiceField):
 
     def __init__(self, table_ref, **kwargs):
         self._table_ref = table_ref
+        self._choices = None
         super(LookupTableItemSerializerField, self).__init__([], **kwargs)
         self._reset_choices()
 
