@@ -1,15 +1,21 @@
+import os
 import sys
 
 from lookup_tables.models import LookupTableItem
 from rest_framework import fields
 import six
 
-from django.conf import settings
 
-if sys.argv[0].endswith('manage.py') and 'runserver' not in sys.argv:
+_IGNORE_INIT_RESET_KEY = 'LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET'
+
+if _IGNORE_INIT_RESET_KEY in os.environ:
+    _IGNORE_INIT_RESET = os.environ[_IGNORE_INIT_RESET_KEY].lower() in ('1', 'true')
+elif len(sys.argv) > 1 and sys.argv[0].endswith('manage.py') and sys.argv[1] != 'runserver':
     _IGNORE_INIT_RESET = True
 else:
-    _IGNORE_INIT_RESET = getattr(settings, 'LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET', False)
+    _IGNORE_INIT_RESET = False
+
+del _IGNORE_INIT_RESET_KEY
 
 
 class LookupTableItemSerializerField(fields.ChoiceField):

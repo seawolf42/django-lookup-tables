@@ -10,6 +10,7 @@ def run_tests(*test_args):
     if not test_args:
         test_args = ['tests']
     os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
+    os.environ['LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET'] = 'false'
     django.setup()
     TestRunner = get_runner(settings)
     test_runner = TestRunner()

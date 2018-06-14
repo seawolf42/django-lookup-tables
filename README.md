@@ -52,11 +52,11 @@ class Post(models.Model):
     state = LookupTableItemField(table_ref='post-state')
 ```
 
-This will create a lookup table called "post-state" that has a single option, `'<DEFAULT>'`. You can now set this field to any value from the `LookupTableItems` model that references the `LookupTable.objects.get(table_ref='post_state')` table.
+This will create a lookup table called "post-state" that has a single option, `'<DEFAULT>'`. You can now set this field to any value from the `LookupTableItems` model that references the `LookupTable.objects.get(table_ref='post-state')` table.
 
 In the admin you will see an entry for 'Lookup Tables'. Here you can manage tables and their associated values. Note that the automatically-generated `'<DEFAULT>'` item can be renamed or removed; this is just created so that the table is not empty on first use.
 
-`django-lookup-tables` integrates properly with forms and `djangorestframework`, so all UI naturally gets up-to-date selection lists just like if you were using a `CharField` with a choices enum or tuple list.
+`django-lookup-tables` integrates properly with forms out of the box, so all UI naturally gets up-to-date selection lists just like if you were using a `CharField` with a choices enum or tuple list.
 
 Each table has an arbitrary list of items. You can order them by setting the "Sort Order" field to any positive integer.
 
@@ -77,6 +77,92 @@ LOOKUP_TABLES = {
     'USE_ADMIN_SORTABLE2': True,
 }
 ```
+
+
+## Using with Django REST Framework
+
+Fields on models will render the same way `CharField` does if you use the `drf_fields.LookupTableItemSerializerField` field on your serializer like so:
+
+```python
+class PostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        fields = ('id', 'title', 'state')
+
+    state = LookupTableItemSerializerField(table_ref='post-state')
+```
+
+The HTML UI provided by DRF will populate dropdowns, and the `OPTIONS` response handler will supply all key/value pairs available for the field:
+
+```json
+OPTIONS /api/posts/1/
+HTTP 200 OK
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+Content-Type: application/json
+Vary: Accept
+
+{
+    "name": "Post Instance",
+    "description": "",
+    "renders": [
+        "application/json",
+        "text/html"
+    ],
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded",
+        "multipart/form-data"
+    ],
+    "actions": {
+        "PUT": {
+            "id": {
+                "type": "integer",
+                "required": false,
+                "read_only": true,
+                "label": "ID"
+            },
+            "title": {
+                "type": "string",
+                "required": true,
+                "read_only": false,
+                "label": "Name",
+                "max_length": 200
+            },
+            "state": {
+                "type": "choice",
+                "required": true,
+                "read_only": false,
+                "label": "State",
+                "choices": [
+                    {
+                        "value": 14,
+                        "display_name": "Draft"
+                    },
+                    {
+                        "value": 18,
+                        "display_name": "Published"
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**NOTE:** If you are using the `LookupTableItemSerializerField` on any serializer, you need to disable an init hook for all management commands except `runserver`. Failure to do so will result in an error similar to the following:
+
+```bash
+django.db.utils.ProgrammingError: relation "lookup_tables_lookuptableitem" does not exist
+LINE 1: ..."lookup_tables_lookuptableitem"."sort_order" FROM "lookup_ta...
+```
+
+Disabling the init-hook can be controlled by putting the following in your `manage.py` script:
+
+```python
+os.environ.setdefault('LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET', str(sys.argv[1] != 'runserver'))
+```
+
+Note additionally that this setting should **not** be disabled in your `wsgi` application.
 
 
 <a name="contributing"></a>
