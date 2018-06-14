@@ -19,10 +19,15 @@ install_dependencies = (
     'Django>=1.8' + (',<1.11.99' if sys.version_info[0] < 3 else ''),
 )
 
+test_dependencies = (
+    'mock',
+    'djangorestframework',
+)
+
 
 setup(
     name='django-lookup-tables',
-    version='0.11.1',
+    version='0.12.0',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
@@ -51,6 +56,6 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     install_requires=install_dependencies,
-    tests_require=install_dependencies + ('mock',),
+    tests_require=install_dependencies + test_dependencies,
     test_suite='runtests.run_tests',
 )
