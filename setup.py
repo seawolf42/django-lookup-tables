@@ -27,7 +27,7 @@ test_dependencies = (
 
 setup(
     name='django-lookup-tables',
-    version='0.11.1',
+    version='0.12.0',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
