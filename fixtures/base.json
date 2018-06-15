@@ -22,7 +22,8 @@
   "pk": 1,
   "fields": {
     "table_ref": "mymodel-status",
-    "name": "mymodel-status"
+    "name": "mymodel-status",
+    "default": 1
   }
 },
 {
@@ -30,7 +31,8 @@
   "pk": 2,
   "fields": {
     "table_ref": "mymodel-category",
-    "name": "mymodel-category"
+    "name": "mymodel-category",
+    "default": null
   }
 },
 {
@@ -38,7 +40,8 @@
   "pk": 3,
   "fields": {
     "table_ref": "mymodel-type",
-    "name": "mymodel-type"
+    "name": "mymodel-type",
+    "default": 7
   }
 },
 {
@@ -47,7 +50,8 @@
   "fields": {
     "table": 1,
     "name": "status 1",
-    "sort_order": 1
+    "sort_order": 1,
+    "is_default": true
   }
 },
 {
@@ -56,7 +60,8 @@
   "fields": {
     "table": 1,
     "name": "status 2",
-    "sort_order": 2
+    "sort_order": 2,
+    "is_default": false
   }
 },
 {
@@ -65,7 +70,8 @@
   "fields": {
     "table": 2,
     "name": "category 1",
-    "sort_order": 1
+    "sort_order": 1,
+    "is_default": false
   }
 },
 {
@@ -74,7 +80,8 @@
   "fields": {
     "table": 2,
     "name": "category 3",
-    "sort_order": 3
+    "sort_order": 3,
+    "is_default": false
   }
 },
 {
@@ -83,7 +90,8 @@
   "fields": {
     "table": 2,
     "name": "category 2",
-    "sort_order": 2
+    "sort_order": 2,
+    "is_default": false
   }
 },
 {
@@ -92,7 +100,8 @@
   "fields": {
     "table": 3,
     "name": "type 2",
-    "sort_order": 2
+    "sort_order": 2,
+    "is_default": false
   }
 },
 {
@@ -101,7 +110,8 @@
   "fields": {
     "table": 3,
     "name": "type 1",
-    "sort_order": 1
+    "sort_order": 1,
+    "is_default": true
   }
 },
 {
