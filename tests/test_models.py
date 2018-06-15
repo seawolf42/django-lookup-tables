@@ -2,6 +2,7 @@ import sys
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.db import models as db_models
 from django.test import TestCase
 
 from lookup_tables import models
@@ -19,32 +20,39 @@ else:
 strings = utils.strings
 
 
-class LookupTableTest(TestCase):
+class ModelTestMixin(object):
+
+    def _test_base_properties(self, name, type, null=False, blank=False, unique=False, editable=True):
+        field = self.item._meta.get_field(name)
+        self.assertIsInstance(field, type)
+        self.assertEqual(field.null, null)
+        self.assertEqual(field.blank, blank)
+        self.assertEqual(field.unique, unique)
+        self.assertEqual(field.editable, editable)
+        return field
+
+    def _test_save_calls_full_clean(self, mock_save):
+        self.item.full_clean = mock.MagicMock()
+        self.item.save()
+        self.item.full_clean.assert_called_once()
+
+
+class LookupTableTest(ModelTestMixin, TestCase):
 
     def setUp(self):
         self.item = models.LookupTable()
 
     def test_table_ref_properties(self):
-        field = self.item._meta.get_field('table_ref')
-        self.assertFalse(field.null)
-        self.assertFalse(field.blank)
-        self.assertTrue(field.unique)
-        self.assertFalse(field.editable)
+        field = self._test_base_properties('table_ref', db_models.CharField, unique=True, editable=False)
         self.assertEqual(field.max_length, 100)
 
     def test_name_properties(self):
-        field = self.item._meta.get_field('name')
-        self.assertFalse(field.null)
-        self.assertFalse(field.blank)
-        self.assertTrue(field.unique)
-        self.assertTrue(field.editable)
+        field = self._test_base_properties('name', db_models.CharField, unique=True)
         self.assertEqual(field.max_length, 100)
 
     @mock.patch('django.db.models.Model.save')
     def test_save_calls_full_clean(self, mock_save):
-        self.item.full_clean = mock.MagicMock()
-        self.item.save()
-        self.item.full_clean.assert_called_once()
+        self._test_save_calls_full_clean(mock_save)
 
     def test_full_clean_cleans_necessary_fields(self):
         self.item._clean_table_ref = mock.MagicMock()
@@ -57,29 +65,23 @@ class LookupTableTest(TestCase):
         self.assertEqual(self.item.table_ref, 'a-regular-string')
 
 
-class LookupTableItemTest(TestCase):
+class LookupTableItemTest(ModelTestMixin, TestCase):
 
     def setUp(self):
         self.table = models.LookupTable.objects.create(table_ref=strings[-1], name=strings[-1])
         self.item = models.LookupTableItem.objects.create(name=strings[0], table=self.table)
 
     def test_table_properties(self):
-        field = self.item._meta.get_field('table')
-        self.assertFalse(field.null)
-        self.assertFalse(field.blank)
-        self.assertFalse(field.editable)
+        field = self._test_base_properties('table', db_models.ForeignKey, editable=False)
+        self.assertEqual(field.related_model, models.LookupTable)
+        self.assertEqual(field.remote_field.on_delete, db_models.PROTECT)
 
     def test_name_properties(self):
-        field = self.item._meta.get_field('name')
-        self.assertFalse(field.null)
-        self.assertFalse(field.blank)
-        self.assertTrue(field.editable)
+        field = self._test_base_properties('name', db_models.CharField)
+        self.assertEqual(field.max_length, 100)
 
     def test_sort_order_properties(self):
-        field = self.item._meta.get_field('sort_order')
-        self.assertFalse(field.null)
-        self.assertFalse(field.blank)
-        self.assertTrue(field.editable)
+        field = self._test_base_properties('sort_order', db_models.PositiveSmallIntegerField)
         self.assertEqual(field.default, 0)
 
     def test_table_relationship(self):
@@ -108,9 +110,7 @@ class LookupTableItemTest(TestCase):
 
     @mock.patch('django.db.models.Model.save')
     def test_save_calls_full_clean(self, mock_save):
-        self.item.full_clean = mock.MagicMock()
-        self.item.save()
-        self.item.full_clean.assert_called_once()
+        self._test_save_calls_full_clean(mock_save)
 
     def test_full_clean_cleans_necessary_fields(self):
         self.item._clean_table = mock.MagicMock()
