@@ -36,6 +36,7 @@ class LookupTableItemField(TestCase):
             to='lookup_tables.LookupTableItem',
             on_delete=db_models.PROTECT,
             limit_choices_to=item.get_lookuptableitem_choices,
+            default=item.get_default_lookuptableitem,
             related_name='+',
         )
 
@@ -50,6 +51,7 @@ class LookupTableItemField(TestCase):
         self.assertTrue('to' in kwargs)
         self.assertTrue('on_delete' in kwargs)
         self.assertFalse('limit_choices_to' in kwargs)
+        self.assertFalse('default' in kwargs)
         self.assertEqual(kwargs['table_ref'], strings[0])
 
     def test_get_choices(self):
@@ -66,6 +68,26 @@ class LookupTableItemField(TestCase):
         q_filter = item.get_lookuptableitem_choices()
         for i, choice in enumerate(models.LookupTableItem.objects.filter(q_filter)):
             self.assertEqual(choice, choices[i])
+
+    def test_get_default_none(self):
+        item = fields.LookupTableItemField(table_ref=strings[0])
+        table = models.LookupTable.objects.create(name=strings[0])
+        [
+            models.LookupTableItem.objects.create(table=table, name=strings[i], sort_order=i)
+            for i in range(len(strings))
+        ]
+        self.assertIsNone(item.get_default_lookuptableitem())
+
+    def test_get_default(self):
+        item = fields.LookupTableItemField(table_ref=strings[0])
+        table = models.LookupTable.objects.create(name=strings[0])
+        choices = [
+            models.LookupTableItem.objects.create(table=table, name=strings[i], sort_order=i)
+            for i in range(len(strings))
+        ]
+        table.default = choices[-1]
+        table.save()
+        self.assertEqual(item.get_default_lookuptableitem(), choices[-1])
 
     def test_table_created_from_field_reference(self):
         item = fields.LookupTableItemField(table_ref=strings[0])
