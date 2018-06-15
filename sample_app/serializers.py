@@ -12,6 +12,6 @@ class MyModelSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'name', 'type', 'status', 'category')
         extra_kwargs = {'url': {'view_name': 'api:mymodel-detail'}}
 
-    type = LookupTableItemSerializerField(table_ref='mymodel-type')
+    type = LookupTableItemSerializerField(table_ref='mymodel-type', required=False)
     status = LookupTableItemSerializerField(table_ref='mymodel-status')
-    category = LookupTableItemSerializerField(table_ref='mymodel-category')
+    category = LookupTableItemSerializerField(table_ref='mymodel-category', required=False, allow_null=True)
