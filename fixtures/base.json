@@ -1,0 +1,127 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$100000$7Rlx7DJbja14$VigHLzev1orbr1PB5hNnFztqLLR7xyPq9dUNypG9I0Q=",
+    "last_login": "2018-06-14T20:21:18.145Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "test@test.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-05-02T00:07:52.875Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "lookup_tables.lookuptable",
+  "pk": 1,
+  "fields": {
+    "table_ref": "mymodel-status",
+    "name": "mymodel-status"
+  }
+},
+{
+  "model": "lookup_tables.lookuptable",
+  "pk": 2,
+  "fields": {
+    "table_ref": "mymodel-category",
+    "name": "mymodel-category"
+  }
+},
+{
+  "model": "lookup_tables.lookuptable",
+  "pk": 3,
+  "fields": {
+    "table_ref": "mymodel-type",
+    "name": "mymodel-type"
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 1,
+  "fields": {
+    "table": 1,
+    "name": "status 1",
+    "sort_order": 1
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 2,
+  "fields": {
+    "table": 1,
+    "name": "status 2",
+    "sort_order": 2
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 3,
+  "fields": {
+    "table": 2,
+    "name": "category 1",
+    "sort_order": 1
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 4,
+  "fields": {
+    "table": 2,
+    "name": "category 3",
+    "sort_order": 3
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 5,
+  "fields": {
+    "table": 2,
+    "name": "category 2",
+    "sort_order": 2
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 6,
+  "fields": {
+    "table": 3,
+    "name": "type 2",
+    "sort_order": 2
+  }
+},
+{
+  "model": "lookup_tables.lookuptableitem",
+  "pk": 7,
+  "fields": {
+    "table": 3,
+    "name": "type 1",
+    "sort_order": 1
+  }
+},
+{
+  "model": "sample_app.mymodel",
+  "pk": 1,
+  "fields": {
+    "name": "One",
+    "type": 6,
+    "status": 1,
+    "category": null
+  }
+},
+{
+  "model": "sample_app.mymodel",
+  "pk": 2,
+  "fields": {
+    "name": "Two",
+    "type": 7,
+    "status": 2,
+    "category": 4
+  }
+}
+]
