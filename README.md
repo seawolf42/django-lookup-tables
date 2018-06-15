@@ -175,6 +175,27 @@ os.environ.setdefault('LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET', str(sys.argv[1] !
 Note additionally that this setting should **not** be disabled in your `wsgi` application.
 
 
+## Sample App
+
+You can see a sample app using these fields buy running the following:
+
+```bash
+$ python manage.py migrate
+$ python manage.py loaddata fixtures/base.json
+$ python manage.py runserver
+```
+
+This app has the following endpoints:
+
+```
+/admin/
+/api/mymodel/
+/api/mymodel/<id>/
+```
+
+The username for the admin user is `admin`, and the password is `pass`.
+
+
 <a name="contributing"></a>
 ## Contributing
 
