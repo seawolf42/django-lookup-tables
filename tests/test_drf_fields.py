@@ -77,6 +77,12 @@ class LookupTableItemSerializerFieldTest(TestCase):
 
     def test_to_representation(self):
         item = LookupTableItemSerializerField(strings[0])
+        self.assertEqual(item.to_representation(MockLTI(1)), 1)
+
+    @mock.patch('lookup_tables.drf_fields._REPR_NAME')
+    def test_to_representation_name_not_id(self, mock_repr_setting):
+        mock_repr_setting.return_value = True
+        item = LookupTableItemSerializerField(strings[0])
         self.assertEqual(item.to_representation(MockLTI(1)), '1')
 
     @mock.patch('lookup_tables.drf_fields.LookupTableItemSerializerField._get_choices')

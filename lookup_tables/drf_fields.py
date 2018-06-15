@@ -6,6 +6,7 @@ from . import conf
 
 
 _IGNORE_INIT_RESET = conf.IGNORE_INIT_RESET
+_REPR_NAME = conf.DRF_REPRESENTATION_NAME_NOT_ID
 
 
 class LookupTableItemSerializerField(fields.ChoiceField):
@@ -32,7 +33,7 @@ class LookupTableItemSerializerField(fields.ChoiceField):
     def to_representation(self, value):
         if value is None:
             return value
-        return super(LookupTableItemSerializerField, self).to_representation(value.name)
+        return super(LookupTableItemSerializerField, self).to_representation(value.name if _REPR_NAME else value.id)
 
     def iter_options(self):
         """
