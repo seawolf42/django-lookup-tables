@@ -50,6 +50,11 @@ class LookupTableTest(ModelTestMixin, TestCase):
         field = self._test_base_properties('name', db_models.CharField, unique=True)
         self.assertEqual(field.max_length, 100)
 
+    def test_default_properties(self):
+        field = self._test_base_properties('default', db_models.ForeignKey, null=True, blank=True)
+        self.assertEqual(field.related_model, models.LookupTableItem)
+        self.assertEqual(field.remote_field.on_delete, db_models.PROTECT)
+
     @mock.patch('django.db.models.Model.save')
     def test_save_calls_full_clean(self, mock_save):
         self._test_save_calls_full_clean(mock_save)
@@ -83,6 +88,10 @@ class LookupTableItemTest(ModelTestMixin, TestCase):
     def test_sort_order_properties(self):
         field = self._test_base_properties('sort_order', db_models.PositiveSmallIntegerField)
         self.assertEqual(field.default, 0)
+
+    def test_is_default_properties(self):
+        field = self._test_base_properties('is_default', db_models.BooleanField, blank=True, editable=False)
+        self.assertEqual(field.default, False)
 
     def test_table_relationship(self):
         self.assertRaises(IntegrityError, self.table.delete)

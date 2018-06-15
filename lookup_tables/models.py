@@ -8,6 +8,8 @@ class LookupTable(models.Model):
     table_ref = models.CharField(max_length=100, unique=True, editable=False)
     name = models.CharField(max_length=100, unique=True)
 
+    default = models.ForeignKey('LookupTableItem', null=True, blank=True, on_delete=models.PROTECT)
+
     class Meta:
         verbose_name = 'Lookup Table'
         ordering = ('name',)
@@ -34,6 +36,8 @@ class LookupTableItem(models.Model):
     name = models.CharField(max_length=100)
 
     sort_order = models.PositiveSmallIntegerField(default=0)
+
+    is_default = models.BooleanField(default=False, editable=False)
 
     class Meta:
         verbose_name = 'Lookup Table Item'
