@@ -11,6 +11,7 @@ class LookupTableItemField(db_models.ForeignKey):
         kwargs['to'] = 'lookup_tables.LookupTableItem'
         kwargs['on_delete'] = db_models.PROTECT
         kwargs['limit_choices_to'] = self.get_lookuptableitem_choices
+        kwargs['default'] = self.get_default_lookuptableitem
         kwargs['related_name'] = '+'
         super(LookupTableItemField, self).__init__(*args, **kwargs)
 
@@ -18,6 +19,8 @@ class LookupTableItemField(db_models.ForeignKey):
         name, path, args, kwargs = super(LookupTableItemField, self).deconstruct()
         if 'limit_choices_to' in kwargs:
             del kwargs['limit_choices_to']
+        if 'default' in kwargs:
+            del kwargs['default']
         kwargs['table_ref'] = self.table_ref
         return name, path, args, kwargs
 
@@ -25,6 +28,11 @@ class LookupTableItemField(db_models.ForeignKey):
         if not self.lookuptable:
             self._init_lookuptable()
         return db_models.Q(table=self.lookuptable)
+
+    def get_default_lookuptableitem(self):
+        if not self.lookuptable:
+            self._init_lookuptable()
+        return models.LookupTableItem.objects.filter(table__table_ref=self.table_ref, is_default=True).first()
 
     def _init_lookuptable(self):
         lookuptable = models.LookupTable.objects.filter(table_ref=self.table_ref).first()
