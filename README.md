@@ -92,6 +92,16 @@ class PostSerializer(serializers.ModelSerializer):
     state = LookupTableItemSerializerField(table_ref='post-state')
 ```
 
+By default, the field will send the `id` of the `LookupTableItem`. If you instead want to send the `name` property, add `DRF_REPRESENTATION_NAME_NOT_ID` to your `settings.py`:
+
+```python
+LOOKUP_TABLES = {
+    # ...
+    'DRF_REPRESENTATION_NAME_NOT_ID': True,
+    # ...
+}
+```
+
 The HTML UI provided by DRF will populate dropdowns, and the `OPTIONS` response handler will supply all key/value pairs available for the field:
 
 ```json

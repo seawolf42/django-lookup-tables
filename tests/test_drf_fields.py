@@ -33,6 +33,16 @@ class LookupTableItemSerializerFieldTest(TestCase):
         self.assertEqual(item._table_ref, strings[0])
         self.assertEqual(item.choices, None)
 
+    @mock.patch('rest_framework.fields.ChoiceField.__init__')
+    @mock.patch('lookup_tables.drf_fields.LookupTableItemSerializerField._reset_choices')
+    @mock.patch('lookup_tables.drf_fields._IGNORE_INIT_RESET')
+    def test_init_no_reset(self, mock_ignore_reset_setting, mock_reset_choices, mock_parent_init):
+        item = LookupTableItemSerializerField(strings[0], x=strings[-1], y=strings[-2])
+        mock_parent_init.assert_called_once_with([], x=strings[-1], y=strings[-2])
+        mock_reset_choices.assert_not_called()
+        self.assertEqual(item._table_ref, strings[0])
+        self.assertEqual(item.choices, None)
+
     def test_to_internal_value_handles_empty_reply(self):
         item = LookupTableItemSerializerField(strings[0], allow_blank=True)
         self.assertIsNone(item.to_internal_value(''))
@@ -66,6 +76,12 @@ class LookupTableItemSerializerFieldTest(TestCase):
             item.to_internal_value('1')
 
     def test_to_representation(self):
+        item = LookupTableItemSerializerField(strings[0])
+        self.assertEqual(item.to_representation(MockLTI(1)), 1)
+
+    @mock.patch('lookup_tables.drf_fields._REPR_NAME')
+    def test_to_representation_name_not_id(self, mock_repr_setting):
+        mock_repr_setting.return_value = True
         item = LookupTableItemSerializerField(strings[0])
         self.assertEqual(item.to_representation(MockLTI(1)), '1')
 

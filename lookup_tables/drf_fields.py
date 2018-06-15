@@ -1,21 +1,12 @@
-import os
-import sys
-
 from lookup_tables.models import LookupTableItem
 from rest_framework import fields
 import six
 
+from . import conf
 
-_IGNORE_INIT_RESET_KEY = 'LOOKUP_TABLES_DRF_FIELD_INIT_NO_RESET'
 
-if _IGNORE_INIT_RESET_KEY in os.environ:
-    _IGNORE_INIT_RESET = os.environ[_IGNORE_INIT_RESET_KEY].lower() in ('1', 'true')
-elif len(sys.argv) > 1 and sys.argv[0].endswith('manage.py') and sys.argv[1] != 'runserver':
-    _IGNORE_INIT_RESET = True
-else:
-    _IGNORE_INIT_RESET = False
-
-del _IGNORE_INIT_RESET_KEY
+_IGNORE_INIT_RESET = conf.IGNORE_INIT_RESET
+_REPR_NAME = conf.DRF_REPRESENTATION_NAME_NOT_ID
 
 
 class LookupTableItemSerializerField(fields.ChoiceField):
@@ -42,7 +33,7 @@ class LookupTableItemSerializerField(fields.ChoiceField):
     def to_representation(self, value):
         if value is None:
             return value
-        return super(LookupTableItemSerializerField, self).to_representation(value.name)
+        return super(LookupTableItemSerializerField, self).to_representation(value.name if _REPR_NAME else value.id)
 
     def iter_options(self):
         """
