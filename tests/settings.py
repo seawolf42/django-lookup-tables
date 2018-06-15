@@ -1,5 +1,6 @@
 import django
 
+
 DEBUG = True
 USE_TZ = True
 
@@ -67,3 +68,26 @@ TEMPLATES = (
 
 APPEND_SLASH = True
 STATIC_URL = '/static/'
+
+
+#
+# Django REST Framework config for local use
+#
+
+from rest_framework.authentication import SessionAuthentication  # noqa
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # disable all CSRF protections locally - DO NOT DO THIS IN PRODUCTION
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'tests.settings.CsrfExemptSessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    )
+}
