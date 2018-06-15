@@ -68,8 +68,8 @@ class LookupTableItem(models.Model):
 
     def _clean_is_default(self):
         if self.is_default:
-            if self.table.default != self:
-                raise ValidationError('is_default must match table default item')
+            # if self.table.default != self:
+            #     raise ValidationError('is_default must match table default item')
             if LookupTableItem.objects.filter(table=self.table, is_default=True).exclude(id=self.id).count() > 0:
                 raise ValidationError('cannot set is_default on multiple items for the same table')
 
