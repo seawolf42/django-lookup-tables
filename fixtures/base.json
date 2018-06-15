@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$100000$7Rlx7DJbja14$VigHLzev1orbr1PB5hNnFztqLLR7xyPq9dUNypG9I0Q=",
-    "last_login": "2018-06-14T20:21:18.145Z",
+    "last_login": "2018-06-15T19:31:39.631Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -22,8 +22,8 @@
   "pk": 1,
   "fields": {
     "table_ref": "mymodel-status",
-    "name": "mymodel-status",
-    "default": 1
+    "name": "MyModel Status",
+    "default": null
   }
 },
 {
@@ -31,7 +31,7 @@
   "pk": 2,
   "fields": {
     "table_ref": "mymodel-category",
-    "name": "mymodel-category",
+    "name": "MyModel Category",
     "default": null
   }
 },
@@ -40,7 +40,7 @@
   "pk": 3,
   "fields": {
     "table_ref": "mymodel-type",
-    "name": "mymodel-type",
+    "name": "MyModel Type",
     "default": 7
   }
 },
@@ -51,7 +51,7 @@
     "table": 1,
     "name": "status 1",
     "sort_order": 1,
-    "is_default": true
+    "is_default": false
   }
 },
 {
