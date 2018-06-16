@@ -1,6 +1,11 @@
+from django.apps import apps
 from django.db import models as db_models
 
+from . import conf
 from . import models
+
+
+_IGNORE_FIELD_DEFAULT_LOOKUPS = conf.IS_RUNNING_MANAGEMENT
 
 
 class LookupTableItemField(db_models.ForeignKey):
@@ -30,6 +35,8 @@ class LookupTableItemField(db_models.ForeignKey):
         return db_models.Q(table=self.lookuptable)
 
     def get_default_lookuptableitem(self):
+        if _IGNORE_FIELD_DEFAULT_LOOKUPS or not apps.ready:
+            return None
         if not self.lookuptable:
             self._init_lookuptable()
         return models.LookupTableItem.objects.filter(table__table_ref=self.table_ref, is_default=True).first()

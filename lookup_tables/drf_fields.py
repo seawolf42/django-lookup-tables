@@ -1,6 +1,7 @@
-from lookup_tables.models import LookupTableItem
 from rest_framework import fields
 import six
+
+from lookup_tables.models import LookupTableItem
 
 from . import conf
 
