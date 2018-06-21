@@ -27,7 +27,7 @@ class LookupTableItemField(TestCase):
         item = fields.LookupTableItemField(table_ref=strings[0])
         self.assertEqual(models.LookupTable.objects.filter(name=strings[0]).count(), 0)
         self.assertEqual(item.table_ref, strings[0])
-        self.assertEqual(item.lookuptable, None)
+        self.assertEqual(item._is_initialized, False)
 
     @mock.patch('django.db.models.ForeignKey.__init__')
     def test_kwargs_includes_foreign_key_requisite_values(self, mock_fk_init):
@@ -96,6 +96,6 @@ class LookupTableItemField(TestCase):
         item.get_lookuptableitem_choices()
         self.assertEqual(models.LookupTable.objects.count(), 1)
         table = models.LookupTable.objects.get(table_ref=strings[0])
-        self.assertEqual(item.lookuptable, table)
+        self.assertEqual(item._is_initialized, True)
         self.assertEqual(models.LookupTableItem.objects.count(), 1)
         models.LookupTableItem.objects.get(table=table, name='<DEFAULT>')

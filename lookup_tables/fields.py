@@ -12,7 +12,7 @@ class LookupTableItemField(db_models.ForeignKey):
 
     def __init__(self, table_ref, *args, **kwargs):
         self.table_ref = table_ref
-        self.lookuptable = None
+        self._is_initialized = False
         kwargs['to'] = 'lookup_tables.LookupTableItem'
         kwargs['on_delete'] = db_models.PROTECT
         kwargs['limit_choices_to'] = self.get_lookuptableitem_choices
@@ -30,14 +30,14 @@ class LookupTableItemField(db_models.ForeignKey):
         return name, path, args, kwargs
 
     def get_lookuptableitem_choices(self):
-        if not self.lookuptable:
+        if not self._is_initialized:
             self._init_lookuptable()
-        return db_models.Q(table=self.lookuptable)
+        return db_models.Q(table__table_ref=self.table_ref)
 
     def get_default_lookuptableitem(self):
         if _IGNORE_FIELD_DEFAULT_LOOKUPS or not apps.ready:
             return None
-        if not self.lookuptable:
+        if not self._is_initialized:
             self._init_lookuptable()
         return models.LookupTableItem.objects.filter(table__table_ref=self.table_ref, is_default=True).first()
 
@@ -46,4 +46,4 @@ class LookupTableItemField(db_models.ForeignKey):
         if not lookuptable:
             lookuptable = models.LookupTable.objects.create(table_ref=self.table_ref, name=self.table_ref)
             models.LookupTableItem.objects.create(table=lookuptable, name='<DEFAULT>')
-        self.lookuptable = lookuptable
+        self._is_initialized = True
