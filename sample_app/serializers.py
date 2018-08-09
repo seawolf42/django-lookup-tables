@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from lookup_tables.drf_fields import LookupTableItemSerializerField
+from lookup_tables.drf_fields import LookupSerializerField
 
 from . import models
 
@@ -12,6 +12,6 @@ class MyModelSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'name', 'type', 'status', 'category')
         extra_kwargs = {'url': {'view_name': 'api:mymodel-detail'}}
 
-    type = LookupTableItemSerializerField(table_ref='mymodel-type', required=False)
-    status = LookupTableItemSerializerField(table_ref='mymodel-status')
-    category = LookupTableItemSerializerField(table_ref='mymodel-category', required=False, allow_null=True)
+    type = LookupSerializerField(models.MyModelType, required=False)
+    status = LookupSerializerField(models.MyModelStatus)
+    category = LookupSerializerField(models.MyModelCategory, required=False, allow_null=True)
