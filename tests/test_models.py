@@ -111,7 +111,11 @@ class LookupTableItemTest(ModelTestMixin, TestCase):
         self.assertEqual(field.default, 0)
 
     def test_is_default_properties(self):
-        field = self._test_base_properties('is_default', db_models.BooleanField, blank=False, editable=False)
+        field = self.item._meta.get_field('is_default')
+        self.assertIsInstance(field, db_models.BooleanField)
+        self.assertEqual(field.null, False)
+        self.assertEqual(field.unique, False)
+        self.assertEqual(field.editable, False)
         self.assertEqual(field.default, False)
 
     def test_table_relationship(self):

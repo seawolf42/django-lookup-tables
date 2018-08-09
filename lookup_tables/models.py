@@ -71,7 +71,7 @@ class LookupTableItem(models.Model):
 
     sort_order = models.PositiveSmallIntegerField(default=0)
 
-    is_default = models.BooleanField(default=False, editable=False)
+    is_default = models.BooleanField(default=False, blank=False, editable=False)
 
     class Meta:
         verbose_name = 'Lookup Table Item'
