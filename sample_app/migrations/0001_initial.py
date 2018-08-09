@@ -15,13 +15,49 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='MyModelCategory',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100, unique=True)),
+                ('sort_order', models.PositiveSmallIntegerField(default=0)),
+            ],
+            options={
+                'ordering': ('sort_order',),
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='MyModelStatus',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100, unique=True)),
+                ('sort_order', models.PositiveSmallIntegerField(default=0)),
+            ],
+            options={
+                'ordering': ('sort_order',),
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='MyModelType',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100, unique=True)),
+                ('sort_order', models.PositiveSmallIntegerField(default=0)),
+            ],
+            options={
+                'ordering': ('sort_order',),
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
             name='MyModel',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=20)),
-                ('category', lookup_tables.fields.LookupTableItemField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', table_ref='mymodel-category', to='lookup_tables.LookupTableItem')),
-                ('status', lookup_tables.fields.LookupTableItemField(on_delete=django.db.models.deletion.PROTECT, related_name='+', table_ref='mymodel-status', to='lookup_tables.LookupTableItem')),
-                ('type', lookup_tables.fields.LookupTableItemField(on_delete=django.db.models.deletion.PROTECT, related_name='+', table_ref='mymodel-type', to='lookup_tables.LookupTableItem')),
+                ('category', lookup_tables.fields.LookupField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='sample_app.MyModelCategory')),
+                ('status', lookup_tables.fields.LookupField(on_delete=django.db.models.deletion.PROTECT, related_name='+', to='sample_app.MyModelStatus')),
+                ('type', lookup_tables.fields.LookupField(on_delete=django.db.models.deletion.PROTECT, related_name='+', to='sample_app.MyModelType')),
             ],
         ),
     ]

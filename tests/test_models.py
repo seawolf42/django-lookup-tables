@@ -38,6 +38,24 @@ class ModelTestMixin(object):
         self.item.full_clean.assert_called_once()
 
 
+class AbstractLookupTableTest(ModelTestMixin, TestCase):
+
+    def setUp(self):
+        self.item = models.AbstractLookupTable()
+
+    def test_name_properties(self):
+        field = self._test_base_properties('name', db_models.CharField, unique=True)
+        self.assertEqual(field.max_length, 100)
+
+    def test_sort_order_properties(self):
+        field = self._test_base_properties('sort_order', db_models.PositiveSmallIntegerField)
+        self.assertEqual(field.default, 0)
+
+    @mock.patch('django.db.models.Model.save')
+    def test_save_calls_full_clean(self, mock_save):
+        self._test_save_calls_full_clean(mock_save)
+
+
 class LookupTableTest(ModelTestMixin, TestCase):
 
     def setUp(self):
@@ -93,7 +111,11 @@ class LookupTableItemTest(ModelTestMixin, TestCase):
         self.assertEqual(field.default, 0)
 
     def test_is_default_properties(self):
-        field = self._test_base_properties('is_default', db_models.BooleanField, blank=True, editable=False)
+        field = self.item._meta.get_field('is_default')
+        self.assertIsInstance(field, db_models.BooleanField)
+        self.assertEqual(field.null, False)
+        self.assertEqual(field.unique, False)
+        self.assertEqual(field.editable, False)
         self.assertEqual(field.default, False)
 
     def test_table_relationship(self):
@@ -109,16 +131,7 @@ class LookupTableItemTest(ModelTestMixin, TestCase):
         models.LookupTableItem.objects.create(name=self.item.name, table=table2)
 
     def test_ordering(self):
-        self.item.sort_order = 3
-        self.item.save()
-        item2 = models.LookupTableItem.objects.create(name=strings[-1], table=self.table, sort_order=1)
-        item3 = models.LookupTableItem.objects.create(name=strings[-2], table=self.table, sort_order=4)
-        table2 = models.LookupTable.objects.create(name=strings[-2])
-        item4 = models.LookupTableItem.objects.create(name=strings[-1], table=table2, sort_order=2)
-        self.assertEquals(
-            list(models.LookupTableItem.objects.all()),
-            [item2, item4, self.item, item3]
-        )
+        self.assertEquals(self.item._meta.ordering, ('sort_order',))
 
     @mock.patch('django.db.models.Model.save')
     def test_save_calls_full_clean(self, mock_save):
