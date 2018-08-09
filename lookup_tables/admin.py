@@ -7,9 +7,15 @@ from . import models
 if conf.USE_ADMIN_SORTABLE2:
     from adminsortable2 import admin as sortableadmin
     class ItemsInlineBase(sortableadmin.SortableInlineAdminMixin, admin.TabularInline): pass  # noqa
+    class LookupAdminBase(sortableadmin.SortableAdminMixin, admin.ModelAdmin): pass  # noqa
 else:
     LookupTableAdminBaseModel = admin.ModelAdmin
     class ItemsInlineBase(admin.TabularInline): pass  # noqa
+    class LookupAdminBase(admin.ModelAdmin): pass  # noqa
+
+
+class LookupAdmin(LookupAdminBase):
+    pass
 
 
 @admin.register(models.LookupTable)
