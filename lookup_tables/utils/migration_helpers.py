@@ -24,7 +24,8 @@ def copy_data(apps, schema_editor, app_name, metas):
 def delete_data(apps, schema_editor, metas):
     LookupTable = apps.get_model('lookup_tables', 'LookupTable')
     for meta in metas:
-        table = LookupTable.objects.get(table_ref=meta[0])
-        for item in table.lookuptableitem_set.all():
-            item.delete()
-        table.delete()
+        table = LookupTable.objects.filter(table_ref=meta[0]).first()
+        if table:
+            for item in table.lookuptableitem_set.all():
+                item.delete()
+            table.delete()
