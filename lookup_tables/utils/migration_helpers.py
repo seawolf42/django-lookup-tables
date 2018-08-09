@@ -14,7 +14,7 @@ def copy_data(apps, schema_editor, app_name, metas):
             if created:
                 value_new.sort_order = value_old.sort_order
             for field_name_old in meta[3].split(','):
-                field_name_new = f'{field_name_old}_new'
+                field_name_new = '{0}_new'.format(field_name_old)
                 update = {field_name_old: value_old}
                 for entity in Model.objects.filter(**update):
                     setattr(entity, field_name_new, value_new)
