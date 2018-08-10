@@ -1,3 +1,5 @@
+import warnings
+
 from django.apps import apps
 from django.db import models as db_models
 
@@ -41,6 +43,7 @@ _IGNORE_FIELD_DEFAULT_LOOKUPS = conf.IS_RUNNING_MANAGEMENT
 class LookupTableItemField(db_models.ForeignKey):
 
     def __init__(self, table_ref, *args, **kwargs):
+        warnings.warn('LookupTableItemField is being removed in version 0.15.0; read Betas.md for more info')
         self.table_ref = table_ref
         self._is_initialized = False
         kwargs['to'] = 'lookup_tables.LookupTableItem'

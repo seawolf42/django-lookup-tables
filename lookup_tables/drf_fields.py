@@ -1,3 +1,5 @@
+import warnings
+
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import fields
 import six
@@ -54,6 +56,7 @@ class LookupSerializerField(fields.ChoiceField):
 class LookupTableItemSerializerField(fields.ChoiceField):
 
     def __init__(self, table_ref, **kwargs):
+        warnings.warn('LookupTableItemSerializerField is being removed in version 0.15.0; read Betas.md for more info')
         self._table_ref = table_ref
         self._choices = None
         super(LookupTableItemSerializerField, self).__init__([], **kwargs)
