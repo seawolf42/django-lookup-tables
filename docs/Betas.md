@@ -1,5 +1,10 @@
 # Release Notes for Beta Versions
 
+## Post Version 0.14
+
+Once everything for the upgrade through version `0.14` has been completed, you can freely upgrade to all future versions.
+
+
 ## Pre Version 0.14:
 
 Versions `0.1` through `0.13` implemented lookup tables using the [One True Lookup Table](https://www.apress.com/gp/blog/all-blog-posts/best-practices-for-using-simple-lookup-tables/13323426) anti-pattern. If you have used this project in its earlier versions, please upgrade in the following way:
