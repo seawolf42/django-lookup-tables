@@ -1,3 +1,5 @@
+import warnings
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db import transaction
@@ -24,6 +26,10 @@ class AbstractLookupTable(models.Model):
 
 
 class LookupTable(models.Model):
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn('LookupTable is being removed in version 0.15.0; read Betas.md for more info')
+        super(LookupTable, self).__init__(*args, **kwargs)
 
     table_ref = models.CharField(max_length=100, unique=True, editable=False)
     name = models.CharField(max_length=100, unique=True)
@@ -65,6 +71,10 @@ class LookupTable(models.Model):
 
 
 class LookupTableItem(models.Model):
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn('LookupTableItem is being removed in version 0.15.0; read Betas.md for more info')
+        super(LookupTableItem, self).__init__(*args, **kwargs)
 
     table = models.ForeignKey(LookupTable, on_delete=models.PROTECT, editable=False)
     name = models.CharField(max_length=100)
