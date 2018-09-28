@@ -21,13 +21,13 @@ class AbstractLookupTable(models.Model):
             super(AbstractLookupTable, self).save(*args, **kwargs)
 
 
-class LookupTable(models.Model):
+class LookupTable(object):
 
     def __init__(self, *args, **kwargs):
         raise Exception('this class is no longer supported; see Betas.md for upgrade information')
 
 
-class LookupTableItem(models.Model):
+class LookupTableItem(object):
 
     def __init__(self, *args, **kwargs):
         raise Exception('this class is no longer supported; see Betas.md for upgrade information')
