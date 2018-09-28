@@ -32,7 +32,7 @@ class LookupField(db_models.ForeignKey):
         # return self.table.objects.filter(is_default=True).first()
 
 
-class LookupTableItemField(db_models.ForeignKey):
+class LookupTableItemField(object):
 
     def __init__(self, *args, **kwargs):
         raise Exception('this class is no longer supported; see Betas.md for upgrade information')
